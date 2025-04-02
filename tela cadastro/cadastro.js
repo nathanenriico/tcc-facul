@@ -1,6 +1,5 @@
-// cadastro.js
 document.addEventListener("DOMContentLoaded", function () {
-    // Função para exibir veículos salvos no localStorage
+    // Função para exibir veículos na tela principal (available cars)
     function exibirVeiculos() {
         const carrosSalvos = JSON.parse(localStorage.getItem("carrosDisponiveis")) || [];
         const availableCarsSection = document.querySelector(".available-cars");
@@ -32,8 +31,39 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Exibir veículos ao carregar a página
+    // Função para exibir veículos na tela de estoque
+    function exibirEstoque() {
+        const carrosSalvos = JSON.parse(localStorage.getItem("carrosDisponiveis")) || [];
+        const stockSection = document.querySelector(".stock-list");
+        stockSection.innerHTML = ""; // Limpar antes de exibir
+
+        if (carrosSalvos.length === 0) {
+            stockSection.innerHTML = "<p>Nenhum carro no estoque.</p>";
+            return;
+        }
+
+        carrosSalvos.forEach((carro) => {
+            const stockCard = document.createElement("div");
+            stockCard.classList.add("stock-card");
+
+            stockCard.innerHTML = `
+                <h3>${carro.fabricante} ${carro.modelo}</h3>
+                <p><strong>Ano:</strong> ${carro.ano}</p>
+                <p><strong>KM:</strong> ${carro.km}</p>
+                <p><strong>Preço:</strong> R$ ${parseFloat(carro.preco).toFixed(2)}</p>
+                <p><strong>Dono(s):</strong> ${carro.quantidadeDono}</p>
+                <p><strong>Descrição:</strong> ${carro.descricao}</p>
+            `;
+
+            stockSection.appendChild(stockCard);
+        });
+    }
+
+    // Exibir veículos na página principal e na página de estoque ao carregar
     exibirVeiculos();
+    if (document.querySelector(".stock-list")) {
+        exibirEstoque(); // Apenas chama se estiver na página de estoque
+    }
 
     // Função para cadastrar veículos
     document.getElementById("cadastrar").addEventListener("click", function () {
@@ -61,8 +91,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         alert("Veículo cadastrado com sucesso!");
 
-        // Atualizar exibição dos veículos na tela
+        // Atualizar exibição dos veículos na tela principal e no estoque
         exibirVeiculos();
+        if (document.querySelector(".stock-list")) {
+            exibirEstoque(); // Atualiza estoque se estiver na página de estoque
+        }
 
         // Limpar campos do formulário
         document.getElementById("fabricante").value = "";
