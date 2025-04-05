@@ -130,6 +130,18 @@ p {
     font-size: 18px;
     border-radius: 50%;
 }
+.car-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+.car-image img {
+    display: block !important;
+    max-width: 100%;
+    height: auto;
+}
+
+
 
 .prev-btn {
     left: 10px;
